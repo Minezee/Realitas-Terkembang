@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Tugas 3 Realitas Terkembang</title>
+  <meta name="description" content="A-Frame Geometry Interaction" />
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+  <script>
+
+    function getRandomPosition() {
+      // Buat ngebatesin biar gk jauh2 amat
+      const range = 1;
+      const randomX = (Math.random() * range * 2) - range;
+      const randomY = (Math.random() * range * 2) - range;
+      const randomZ = (Math.random() * range * 2) - range;
+      return { x: randomX, y: randomY, z: randomZ };
+    }
+
+    AFRAME.registerComponent('randomize-position', {
+      init: function () {
+        var el = this.el;
+        el.addEventListener('mouseenter', function () {
+          const newPos = getRandomPosition();
+          el.setAttribute('position', {
+            x: el.getAttribute('position').x + newPos.x,
+            y: el.getAttribute('position').y + newPos.y,
+            z: el.getAttribute('position').z + newPos.z
+          });
+        });
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <a-scene>
+    <a-assets>
+      <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+    </a-assets>
+
+    <a-entity>
+      <a-box position="4.5 -.1 -5" rotation="90 0 0" scale="1.2 1.2 1.2" color="#000000"
+        event-set__mouseenter="scale: 1 1 1; color: red"
+        event-set__mouseleave="scale: 1.2 1.2 1.2; color: black"></a-box>
+        <a-sphere position="-4 -1 -4" radius="1.25" scale=".2 .2 .2" color="#000000"
+        randomize-position></a-sphere>
+    </a-entity>
+
+    <a-entity>
+      <a-cylinder position="0 1.25 -3" radius="0.5" scale="1 .1 1" color="#FFC65D"
+        event-set__mouseenter="scale: 1 1 1"
+        event-set__mouseleave="scale: 1 .1 1"></a-cylinder>
+    </a-entity>
+
+    <a-camera>
+      <a-cursor id="cursor"
+        animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
+        animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing">
+      </a-cursor>
+    </a-camera>
+  </a-scene>
+</body>
+
+</html>
